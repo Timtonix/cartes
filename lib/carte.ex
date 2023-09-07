@@ -34,11 +34,12 @@ defmodule Carte do
   :enseigne_invalide
   iex> Carte.new("as", "pique")
   %Carte{enseigne: "pique", valeur: "1"}
+  iex> Carte.new("as", "trefle")
+  %Carte{enseigne: "trèfle", valeur: "1"}
   """
   @spec new(String.t(), String.t()) :: t() | carte_invalide()
-  def new(valeur, enseigne) when valeur == "as" and enseigne in @enseignes do
-    %Carte{valeur: "1", enseigne: enseigne}
-  end
+  def new("as", enseigne), do: new("1", enseigne)
+  def new(valeur, "trefle"), do: new(valeur, "trèfle")
 
   def new(valeur, enseigne) when valeur in @valeur and enseigne in @enseignes do
     %Carte{valeur: valeur, enseigne: enseigne}
