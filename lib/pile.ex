@@ -117,4 +117,51 @@ defmodule Pile do
   def melanger(pile) do
     %{pile | cartes: Enum.shuffle(pile)}
   end
+
+  @doc """
+  Retire un certain nombre de cartes de la pile
+
+  Le nombre par défaut est 1, si on retire plus de carte qu'il n'y en a, on retire au maximum.
+  On retire les carte par le dessus de la pile.
+
+  ## Exemples
+    iex> {retirées, restantes} =
+    iex> Pile.new()
+    iex> |> Pile.ajouter("as", "pique")
+    iex> |> Pile.ajouter("roi", "trèfle")
+    iex> |> Pile.ajouter("roi", "carreau")
+    iex> |> Pile.retirer(2)
+    iex> {"roi", "trèfle"} in retirées
+    true
+    iex> {"roi", "carreau"} in retirées
+    true
+    iex> {"as", "pique"} in retirées
+    false
+    iex> Pile.taille(retirées)
+    2
+    iex> Pile.taille(restantes)
+    1
+  """
+  @spec retirer(t(), number()) :: {t(), t()}
+  def retirer(pile, nombre \\ 1) when is_number(nombre) and nombre > 0 do
+    retirees = Enum.take(pile, nombre)
+    restantes = Enum.drop(pile, nombre)
+    {%Pile{cartes: retirees}, %{pile | cartes: restantes}}
+  end
+
+  @doc """
+  Transfère une carte d'une pioche vers le sommet d'une autre (main vers pioche par exemple)
+  Prends en premier paramètre la pile d'origine, ensuite la pile de destination et enfin la carte en question
+
+  ## Exemples
+    iex> origine = Pile.new() |> Pile.ajouter("as", "trèfle") |>  Pile.ajouter("as", "coeur")
+    iex> destination = Pile.new() |> Pile.ajouter("as", "carreau")
+    iex> {origine, destination} = Pile.transferer(origine, destination, {"as", "coeur"})
+    iex> {"as", "coeur"} in destination
+    true
+    iex> {"as", "coeur"} in origine
+    false
+  """
+  @spec transferer(t(), t(), {String.t(), String.t()}) :: {t(), t()}
+  def transferer()
 end
