@@ -71,6 +71,7 @@ defmodule Pile do
   end
   @doc """
   Prends la pile de carte existante et lui ajoute la carte renseignée
+
   ## Exemples
   iex>Pile.ajouter(%Pile{}, "roi", "coeur")
   %Pile{cartes: [%Carte{valeur: "roi", enseigne: "coeur"}]}
@@ -98,4 +99,22 @@ defmodule Pile do
   """
   @spec taille(t()) :: integer()
   def taille(pile), do: length(pile.cartes)
+
+  @doc """
+  Mélange les cartes de la pile semi-aléatoirement
+
+  On utilise `Enum.shuffle` avec un *seed* qui nous permet de prédire le résultat
+
+  ## Exemples
+    iex> :rand.seed(:exsss, {100, 101, 102})
+    iex> pile = Pile.new(52) |> Pile.melanger()
+    iex> List.first(pile.cartes)
+    #Carte<10 de coeur>
+    iex> Pile.taille(pile)
+    52
+  """
+  @spec melanger(t()) :: t()
+  def melanger(pile) do
+    %{pile | cartes: Enum.shuffle(pile)}
+  end
 end
