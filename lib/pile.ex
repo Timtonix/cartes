@@ -163,5 +163,11 @@ defmodule Pile do
     false
   """
   @spec transferer(t(), t(), {String.t(), String.t()}) :: {t(), t()}
-  def transferer()
+  def transferer(origine, destination, {valeur, enseigne}) do
+    transferer(origine, destination, Carte.new(valeur, enseigne))
+  end
+
+  def transferer(origine, destination, carte) do
+    true
+  end
 end
