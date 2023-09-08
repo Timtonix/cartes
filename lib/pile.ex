@@ -6,12 +6,38 @@ defmodule Pile do
   de la pile.
   """
   defstruct cartes: []
+
   @typedoc "Une pile de cartes dans un ordre précis."
   @type t() :: %Pile{cartes: [Carte.t()]}
 
   defimpl Enumerable do
     def count(pile), do: {:ok , Pile.taille(pile)}
+
+    def member?(pile, {valeur, enseigne}) do
+      carte = Carte.new(valeur, enseigne)
+      {:ok, carte in pile.cartes}
+    end
+
+    def member?(pile, carte) do
+      {:ok, carte in pile.cartes}
+    end
+
+    def reduce(pile, acc, func) do
+      Enumerable.List.reduce(pile.cartes, acc, func)
+    end
+
+    def slice(%Pile{cartes: []}), do: {:ok, 0, fn _, _, _ -> [] end}
+    def slice(_list), do: {:error, __MODULE__}
   end
+
+  defimpl Inspect do
+    def inspect(pile, options) do
+      cartes = Enum.map(pile.cartes, fn carte -> Carte.nom(carte) end)
+      Inspect.Algebra.concat(["#Pile", Inspect.Algebra.to_doc(cartes, options)])
+    end
+  end
+
+
   @doc """
   Crée une pile vide.
   ## Exemples
