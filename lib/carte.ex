@@ -81,5 +81,16 @@ defmodule Carte do
     end
   end
 
+  @doc """
+  Retourne une liste de 52 cartes
+  """
+  @spec toutes() :: [t()]
+  def toutes() do
+    for enseigne <- @enseignes, valeur <- @valeur do
+      new(valeur, enseigne)
+    end
+  end
+
+
 end
 

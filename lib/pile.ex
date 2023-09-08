@@ -37,7 +37,6 @@ defmodule Pile do
     end
   end
 
-
   @doc """
   Crée une pile vide.
   ## Exemples
@@ -47,6 +46,29 @@ defmodule Pile do
   @spec new() :: t()
   def new(), do: %Pile{}
 
+  @doc """
+  Créer une pile avec un certain nombre de cartes à l'intérieur
+
+  Deux valeurs sont pssibles : 0 ou 52 (0 vide, 52 pleine)
+
+  ## Exemples
+    iex>Pile.new(0)
+    %Pile{cartes: []}
+
+    iex>pile = Pile.new(52)
+    iex>{"1", "pique"} in pile
+    true
+    iex>{"7", "carreau"} in pile
+    true
+    iex>Pile.taille(pile)
+    52
+  """
+  @spec new(0 | 52) :: t()
+  def new(0), do: %Pile{}
+
+  def new(52) do
+    %Pile{cartes: Carte.toutes()}
+  end
   @doc """
   Prends la pile de carte existante et lui ajoute la carte renseignée
   ## Exemples
