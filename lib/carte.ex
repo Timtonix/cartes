@@ -17,6 +17,17 @@ defmodule Carte do
   @typedoc "Erreur dans la création de la carte"
   @type carte_invalide() :: :valeur_invalide | :enseigne_invalide
 
+  defimpl String.Chars do
+    def to_string(carte) do
+      Carte.nom(carte)
+    end
+  end
+
+  defimpl Inspect do
+    def inspect(carte, _opts) do
+      Inspect.Algebra.concat(["#Carte<", Carte.nom(carte), ">"])
+    end
+  end
 
   @doc """
   Crée une nouvelle carte

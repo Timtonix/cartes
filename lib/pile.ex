@@ -8,6 +8,10 @@ defmodule Pile do
   defstruct cartes: []
   @typedoc "Une pile de cartes dans un ordre précis."
   @type t() :: %Pile{cartes: [Carte.t()]}
+
+  defimpl Enumerable do
+    def count(pile), do: {:ok , Pile.taille(pile)}
+  end
   @doc """
   Crée une pile vide.
   ## Exemples
@@ -34,4 +38,16 @@ defmodule Pile do
         erreur
     end
   end
+
+  @doc """
+  Retourne la taille de la pile de carte
+
+  ## Exemples
+    iex>Pile.new |> Pile.taille
+    0
+    iex>Pile.new |> Pile.ajouter("7", "trèfle") |> Pile.taille
+    1
+  """
+  @spec taille(t()) :: integer()
+  def taille(pile), do: length(pile.cartes)
 end
