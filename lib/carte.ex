@@ -52,4 +52,23 @@ defmodule Carte do
   def new(_valeur, _enseigne)do
     :valeur_invalide
   end
+
+  @doc """
+  Retourne le nom de la carte en Français
+
+  ## Exemples
+    iex> Carte.nom(Carte.new("3", "trèfle"))
+    "3 de trèfle"
+    iex> Carte.nom(Carte.new("1", "carreau"))
+    "as de carreau"
+  """
+  def nom(carte) do
+    if carte.valeur == "1" do
+      "as de #{carte.enseigne}"
+    else
+      "#{carte.valeur} de #{carte.enseigne}"
+    end
+  end
+
 end
+
