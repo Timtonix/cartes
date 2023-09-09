@@ -9,11 +9,11 @@ defstruct actuel: 0, defausse: Pile.new(), mains: %{}, noms: %{},
 @typedoc "Un jeu de 8 américain"
 @type t() :: %{
   actuel: integer(),
-defausse: Pile.t(),
+  defausse: Pile.t(),
   mains: %{integer() => Pile.t()},
   noms: %{integer(), String.t()}
   pioche: String.t()
-sens: :ordinaire | :inverse,
-visible: Carte.t()
+  sens: :ordinaire | :inverse,
+  visible: Carte.t()
              }
 end
