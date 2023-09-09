@@ -176,4 +176,24 @@ defmodule Pile do
       {origine, destination}
     end
   end
+
+  @doc """
+  Cette fonction permet de fusionner deux piles de cartes
+
+  Elle prend les deux piles en paramètre et n'en retourne qu'une.
+
+  ## Exemples
+    iex> première = Pile.new |> Pile.ajouter("3", "trèfle")
+    iex> seconde = Pile.new |> Pile.ajouter("valet", "trèfle")
+    iex> pile = Pile.fusionner(première, seconde)
+    iex> {"3", "trèfle"} in pile
+    true
+    iex> {"valet", "trèfle"} in pile
+    true
+  """
+  @spec fusionner(t(), t()) :: t()
+  def fusionner(premiere, seconde) do
+    %Pile{cartes: Enum.concat(premiere, seconde)}
+    # Enum.reduce(premiere, seconde, fn carte, acc -> %Pile{cartes: [carte | acc.cartes]} end)
+  end
 end
