@@ -168,6 +168,12 @@ defmodule Pile do
   end
 
   def transferer(origine, destination, carte) do
-    true
+    if carte in origine do
+      origine = %{origine | cartes: List.delete(origine.cartes, carte)}
+      destination = %{destination | cartes: [carte | destination.cartes]}
+      {origine, destination}
+    else
+      {origine, destination}
+    end
   end
 end
