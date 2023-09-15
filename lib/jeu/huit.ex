@@ -11,7 +11,7 @@ defmodule Jeu.Huit do
     actuel: integer(),
     defausse: Pile.t(),
     mains: %{integer() => Pile.t()},noms: %{integer(), String.t()},
-    pioche: String.t(),
+    pioche: Pile.t(),
     sens: :ordinaire | :inverse,
     visible: Carte.t()
                }
@@ -27,6 +27,17 @@ defmodule Jeu.Huit do
   Crée une nouvelle structure.
   Cette fonction retourne la structure propre aux règles de jeu
   (probablement définie dans le module spécifique).
+
+  ## Exemples
+    iex> huit = Jeu.Huit.new()
+    iex> Pile.taille(huit.pioche)
+    51
   """
   @spec new() :: t()
+  def new() do
+    pioche = Pile.new(52) |> Pile.melanger()
+    {visibles, pioche} = Pile.retirer(pioche, 1)
+
+    %Jeu.Huit{pioche: pioche, visible: Enum.at(visibles, 0)}
+  end
 end
