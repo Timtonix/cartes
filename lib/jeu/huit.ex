@@ -10,7 +10,8 @@ defmodule Jeu.Huit do
   @type t() :: %{
     actuel: integer(),
     defausse: Pile.t(),
-    mains: %{integer() => Pile.t()},noms: %{integer(), String.t()},
+    mains: %{integer() => Pile.t()},
+    noms: %{integer(), String.t()},
     pioche: Pile.t(),
     sens: :ordinaire | :inverse,
     visible: Carte.t()
@@ -39,5 +40,25 @@ defmodule Jeu.Huit do
     {visibles, pioche} = Pile.retirer(pioche, 1)
 
     %Jeu.Huit{pioche: pioche, visible: Enum.at(visibles, 0)}
+  end
+
+  @impl true
+  @doc """
+  Return `true` si l'on peut ajouter un nouveau joueur au jeu, `false` sinon.
+
+  On ne peut pas ajouter plus de 5 joueurs (7*5 = 35)
+
+  ### Exemples
+      iex> jeu = Jeu.Huit.new()
+      iex> Jeu.Huit.ajouter_joueur?(jeu)
+      true
+      iex> noms = for i <- 1..5 ,into: %{}, do: {i, ""}
+      iex> jeu = %{jeu | noms: noms}
+      iex> Jeu.Huit.ajouter_joueur?(jeu)
+      false
+  """
+  @spec ajouter_joueur?(struct()) ::boolean()
+  def ajouter_joueur?(jeu) do
+    map_size(jeu.noms) < 5
   end
 end
