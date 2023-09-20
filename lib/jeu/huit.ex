@@ -69,7 +69,10 @@ defmodule Jeu.Huit do
   @spec ajouter_joueur(struct(), String.t()) :: {struct(), integer()}
   def ajouter_joueur(jeu, joueur) do
     {cartes_joueur, pioche} = Pile.retirer(jeu.pioche, 7)
-    numero_joueur = map_size(jeu.noms) + 1
-    {%{jeu | pioche: pioche, mains: %{numero_joueur => cartes_joueur}, noms: %{numero_joueur => joueur}}, numero_joueur}
+    numero_joueur = map_size(jeu.noms)
+    mains = Map.put(jeu.mains, numero_joueur, cartes_joueur)
+    noms = Map.put(jeu.noms, numero_joueur, jeu)
+    jeu = %{jeu | mains: mains, noms: noms, pioche: pioche}
+    {jeu, numero_joueur}
   end
 end
