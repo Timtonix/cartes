@@ -4,14 +4,14 @@ defmodule Jeu.Huit do
   """
   @behaviour Regles
   defstruct actuel: 0, defausse: Pile.new(), mains: %{}, noms: %{},
-      pioche: Pile.new(), sens: ordinaire, visible: nil
+      pioche: Pile.new(), sens: :ordinaire, visible: nil
 
   @typedoc "Un jeu de 8 américain"
   @type t() :: %{
     actuel: integer(),
     defausse: Pile.t(),
     mains: %{integer() => Pile.t()},
-    noms: %{integer(), String.t()},
+    noms: %{integer() => String.t()},
     pioche: Pile.t(),
     sens: :ordinaire | :inverse,
     visible: Carte.t()
@@ -60,5 +60,16 @@ defmodule Jeu.Huit do
   @spec ajouter_joueur?(struct()) ::boolean()
   def ajouter_joueur?(jeu) do
     map_size(jeu.noms) < 5
+  end
+
+  @impl true
+  @doc """
+
+  """
+  @spec ajouter_joueur(struct(), String.t()) :: {struct(), integer()}
+  def ajouter_joueur(jeu, joueur) do
+    {cartes_joueur, pioche} = Pile.retirer(jeu.pioche, 7)
+    numero_joueur = map_size(jeu.noms) + 1
+    {%{jeu | pioche: pioche, mains: %{numero_joueur => cartes_joueur}, noms: %{numero_joueur => joueur}}, numero_joueur}
   end
 end
