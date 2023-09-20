@@ -64,14 +64,14 @@ defmodule Jeu.Huit do
 
   @impl true
   @doc """
-
+  Un fonction qui ajoute un joueur et lui donne 7 cartes de la pile
   """
   @spec ajouter_joueur(struct(), String.t()) :: {struct(), integer()}
   def ajouter_joueur(jeu, joueur) do
     {cartes_joueur, pioche} = Pile.retirer(jeu.pioche, 7)
     numero_joueur = map_size(jeu.noms)
     mains = Map.put(jeu.mains, numero_joueur, cartes_joueur)
-    noms = Map.put(jeu.noms, numero_joueur, jeu)
+    noms = Map.put(jeu.noms, numero_joueur, joueur)
     jeu = %{jeu | mains: mains, noms: noms, pioche: pioche}
     {jeu, numero_joueur}
   end
