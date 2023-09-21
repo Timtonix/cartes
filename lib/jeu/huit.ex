@@ -75,4 +75,17 @@ defmodule Jeu.Huit do
     jeu = %{jeu | mains: mains, noms: noms, pioche: pioche}
     {jeu, numero_joueur}
   end
+
+  @impl true
+  @doc """
+  Retourne `true` si le joueur peut jouer un coup, `false` sinon.
+  On doit préciser le coup, le joueur et le jeu.
+
+  Le coup peut être un atom comme `:piocher` ou un tple `{:jouer, carte}`
+  """
+  @spec jouer?(struct(), integer(), atom() | tuple()) :: boolean()
+  def jouer?(jeu, joueur, coup) do
+    true
+  end
+
 end
