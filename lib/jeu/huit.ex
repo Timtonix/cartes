@@ -89,14 +89,6 @@ defmodule Jeu.Huit do
   end
 
   def jouer?(jeu, joueur, {:jouer, valeur, enseigne}) do
-    """
-    Méthode non totalement fonctionnelle
-
-    cartes_du_joueur = jeu.mains[joueur]
-    carte = Carte.new(valeur, enseigne)
-    Enum.member?(cartes_du_joueur, carte)
-    """
-
     # En utilisant plutot la récursion
     carte = Carte.new(valeur, enseigne)
     case carte do
@@ -110,7 +102,7 @@ defmodule Jeu.Huit do
   end
 
   def jouer?(jeu, joueur, {:jouer, %Carte{valeur: "8"} = carte}) do
-    carte in jeu.mains[joueur] and (carte.valeur == jeu.visible.valeur or carte.enseigne = jeu.visible.enseigne)
+    carte in jeu.mains[joueur] and (carte.valeur == jeu.visible.valeur or carte.enseigne == jeu.visible.enseigne)
   end
 
   def jouer?(_jeu, _joueur, _coup) do
