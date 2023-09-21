@@ -29,7 +29,7 @@ defmodule JeuHuitTest do
     mains = %{id => Pile.new() |> Pile.ajouter("5", "carreau")}
     jeu = %{jeu | mains: mains}
 
-    assert Jeu.Huit.jouer?(jeu, id, {:jouer, "10", "carreau"}) == true
+    assert Jeu.Huit.jouer?(jeu, id, {:jouer, "5", "carreau"}) == true
     assert Jeu.Huit.jouer?(jeu, id, :piocher) == false
 
   end
