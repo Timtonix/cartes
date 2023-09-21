@@ -110,8 +110,11 @@ defmodule Jeu.Huit do
   end
 
   def jouer?(jeu, joueur, {:jouer, %Carte{valeur: "8"} = carte}) do
-    carte in jeu.mains[joueur]
+    carte in jeu.mains[joueur] and (carte.valeur == jeu.visible.valeur or carte.enseigne = jeu.visible.enseigne)
   end
 
+  def jouer?(_jeu, _joueur, _coup) do
+    false
+  end
 
 end
