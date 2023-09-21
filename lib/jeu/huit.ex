@@ -83,9 +83,35 @@ defmodule Jeu.Huit do
 
   Le coup peut être un atom comme `:piocher` ou un tple `{:jouer, carte}`
   """
-  @spec jouer?(struct(), integer(), atom() | tuple()) :: boolean()
-  def jouer?(jeu, joueur, coup) do
-    true
+  @spec jouer?(struct(), integer(), Regles.coup()) :: boolean()
+  def jouer?(jeu, joueur, _) when joueur != jeu.actuel do
+    false
   end
+
+  def jouer?(jeu, joueur, {:jouer, valeur, enseigne}) do
+    """
+    Méthode non totalement fonctionnelle
+
+    cartes_du_joueur = jeu.mains[joueur]
+    carte = Carte.new(valeur, enseigne)
+    Enum.member?(cartes_du_joueur, carte)
+    """
+
+    # En utilisant plutot la récursion
+    carte = Carte.new(valeur, enseigne)
+    case carte do
+      %Carte{} -> jouer?(jeu, joueur, {:jouer, carte})
+      _ -> false
+    end
+  end
+
+  def jouer?(jeu, joueur, {:jouer, %Carte{valeur: "8"} = carte}) do
+    carte in jeu.mains[joueur]
+  end
+
+  def jouer?(jeu, joueur, {:jouer, %Carte{valeur: "8"} = carte}) do
+    carte in jeu.mains[joueur]
+  end
+
 
 end
