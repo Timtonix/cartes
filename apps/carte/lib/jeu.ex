@@ -19,8 +19,20 @@ defmodule Jeu do
     GenServer.start_link(__MODULE__, nil, options)
   end
 
+  @doc """
+  Crée une nouvelle partie de jeu de cartes.
+
+  On précise en paramètre le mode de jeu (`Jeu.Huit` par exemple)
+  L'identifiant de la partie est crée à la volée, tout en sachant que cette partie sera hébergée sur l'instance la moins chargée.
+    L'ID et le PID de la partie seront retournés en tuple
+  """
+  @spec creer_partie(module()) :: {integer(), pid()}
+  def creer_partie(regles) do
+
+  end
   @impl true
   def init(_) do
     {:ok, %{}}
   end
+
 end
