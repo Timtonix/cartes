@@ -51,5 +51,3 @@ defmodule Jeu do
   end
 
 end
-
-end
