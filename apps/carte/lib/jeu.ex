@@ -28,11 +28,28 @@ defmodule Jeu do
   """
   @spec creer_partie(module()) :: {integer(), pid()}
   def creer_partie(regles) do
-
+    petite_charge = Enum.min_by(:pg.get_members("cartes", fn processus -> nombre_parties(processus) end))
   end
+
+  @doc """
+  Retourne le nombre de parties en cours sur l'instance
+  """
+  @spec nombre_parties(pid()) :: integer()
+  def nombre_parties(processus) do
+    GenServer.call(processus, :nombre_parties)
+  end
+
   @impl true
   def init(_) do
+    :pg.join("cartes", self())
     {:ok, %{}}
   end
+
+  @impl true
+  def handle_call(:nombre_parties, _from, parties) do
+    {:reply, map_size(parties), parties}
+  end
+
+end
 
 end
