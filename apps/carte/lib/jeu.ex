@@ -42,12 +42,20 @@ defmodule Jeu do
   @impl true
   def init(_) do
     :pg.join("cartes", self())
-    {:ok, %{}}
+    {:ok, {0, %{}}}
   end
 
   @impl true
-  def handle_call(:nombre_parties, _from, parties) do
-    {:reply, map_size(parties), parties}
+  def handle_call(:nombre_parties, _from, {identifiant_max, parties}) do
+    {:reply, map_size(parties), {identifiant_max, parties}}
   end
 
+  @impl true
+  def handle_call({:creer_partie, regles}, _from, {identifiant_max, parties}) do
+    identifiant = :erlang.phash2({node(), identifiant_max})
+    {:ok, nouvelle_partie} =
+      DynamicSupervisor.start_child(Partie.Superviseur, {Partie, {identifiant, regles}})
+    parties = Map.put(parties, identifiant, {nouvelle_partie, regles.titre()})
+    {:reply, {identifiant, nouvelle_partie}, [identifiant_max + 1, parties]}
+  end
 end
