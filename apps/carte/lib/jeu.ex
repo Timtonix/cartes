@@ -28,7 +28,8 @@ defmodule Jeu do
   """
   @spec creer_partie(module()) :: {integer(), pid()}
   def creer_partie(regles) do
-    petite_charge = Enum.min_by(:pg.get_members("cartes", fn processus -> nombre_parties(processus) end))
+    petite_charge = Enum.min_by(:pg.get_members("cartes"), fn processus -> nombre_parties(processus) end)
+    GenServer.call(petite_charge, {:creer_partie, regles})
   end
 
   @doc """
@@ -53,9 +54,10 @@ defmodule Jeu do
   @impl true
   def handle_call({:creer_partie, regles}, _from, {identifiant_max, parties}) do
     identifiant = :erlang.phash2({node(), identifiant_max})
+    IO.puts("#{node()}")
     {:ok, nouvelle_partie} =
       DynamicSupervisor.start_child(Partie.Superviseur, {Partie, {identifiant, regles}})
     parties = Map.put(parties, identifiant, {nouvelle_partie, regles.titre()})
-    {:reply, {identifiant, nouvelle_partie}, [identifiant_max + 1, parties]}
+    {:reply, {identifiant, nouvelle_partie}, {identifiant_max + 1, parties}}
   end
 end
