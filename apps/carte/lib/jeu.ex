@@ -61,6 +61,17 @@ defmodule Jeu do
     Enum.reduce(parties, &Map.merge/2)
   end
 
+  @spec notifier_joueurs(integer()) :: :ok
+  def notifier_jouers(id) do
+    Enum.each(:pg.get_members({:joueur, id}), fn joueur -> notifier_jouer(joueur) end)
+  end
+
+  @spec notifier_joueur(pid()) :: :actualiser
+  def notifier_jouer(joueur) do
+    send(joueur, :actualiser)
+  end
+
+
   @impl true
   def init(_) do
     :pg.join("cartes", self())
@@ -93,4 +104,13 @@ defmodule Jeu do
     {:reply, parties, {identifiant_max, parties}}
   end
 
+  @impl true
+  def handle_call({:ajouter_joueur ,id, processus, nom}, _from, {identifiant_max, parties}) do
+    resultat = Partie.ajouter_joueur(processus, nom)
+
+    if resultat != :invalide do
+      notifier_jouers(id)
+    end
+    {:reply, resultat, {identifiant_max, parties}}
+  end
 end
