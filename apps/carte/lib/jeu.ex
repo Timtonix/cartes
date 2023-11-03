@@ -89,14 +89,28 @@ defmodule Jeu do
     resultat = GenServer.call(entree, {:ajouter_jouer, id, processus, nom})
 
     case resultat do
-      {joueur, _} ->
+      {id_joueur, _} ->
         :pg.join({:joueur, id}, self())
          notifier_jouer(self())
-         {:ok, joueur}
+         {:ok, id_joueur}
       :invalide -> :invalide
     end
 
   end
+
+  @doc """
+  Joue un coup dans une partie, notifie les joueurs de celle-ci
+
+  Cette fonction permet au joueur (grace à son identifiant) de jouer un coup, également précisé en paramètre
+  Cette opération ne tient pas non plus compte de l'emplacement de la partie
+
+  Paramètres :
+  - `id` de la partie
+  - `pid` de la partie
+  - `joueur` identifiant du joueur
+  - `coup` le coup du joueur
+  """
+
 
 
   @impl true
@@ -139,5 +153,16 @@ defmodule Jeu do
       notifier_jouers(id)
     end
     {:reply, resultat, {identifiant_max, parties}}
+  end
+
+  @impl true
+  def handle_call({:jouer, id, processus, joueur, coup}, _from, {identifiant_max, parties}) do
+    resultat = Partie.jouer(processus, joueur, coup)
+
+    if resultat != :invalide do
+      notifier_jouers(id)
+    end
+
+    {:reply, resultat, [identifiant_max, parties]}
   end
 end
