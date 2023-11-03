@@ -71,8 +71,15 @@ defmodule Jeu do
     {:reply, {identifiant, nouvelle_partie}, {identifiant_max + 1, parties}}
   end
 
+  @impl true
   def handle_call({:trouver_partie, identifiant}, _from, {indentifiant_max, parties}) do
     {partie, _} = Map.get(parties, identifiant, {nil, nil})
     {:reply, partie, {indentifiant_max, parties}}
   end
+
+  @impl true
+  def handle_call(:lister_parties, _from, {identifiant_max, parties}) do
+    {:reply, parties, {identifiant_max, parties}}
+  end
+
 end
