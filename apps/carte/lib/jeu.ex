@@ -71,6 +71,33 @@ defmodule Jeu do
     send(joueur, :actualiser)
   end
 
+  @doc """
+  Ajoute un joueur dans une partie, notifie le processus appelant
+
+  Cette fonction ajoute un joueur avec son nom dans la partie correspondante.
+  Cette fonction ne tient pas compte de l'emplacement de la partie, qu'elle soit sur cette instance ou se le cluster.
+  Le processus appelant `self/0` sera ajouté au groupe de la partie
+
+  Paramètres :
+    - `id` de la partie
+    - `pid` de la partie
+    - `nom` du joueur
+  """
+  @spec ajouter_joueur(integer(), pid(), String.t()) :: {:ok, integer}
+  def ajouter_joueur(id, processus, nom) do
+    entree = List.first(:pg.get_members("cartes"))
+    resultat = GenServer.call(entree, {:ajouter_jouer, id, processus, nom})
+
+    case resultat do
+      {joueur, _} ->
+        :pg.join({:joueur, id}, self())
+         notifier_jouer(self())
+         {:ok, joueur}
+      :invalide -> :invalide
+    end
+
+  end
+
 
   @impl true
   def init(_) do
