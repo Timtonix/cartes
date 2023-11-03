@@ -50,6 +50,17 @@ defmodule Jeu do
     Enum.find_value(:pg.get_members("cartes"), fn entree -> GenServer.call(entree, {:trouver_partie, identifiant}) end)
   end
 
+  @doc """
+  Retourne une map (identifiant => {PID, titre}) de toutes les parties, peu importe l'instance
+  """
+  @spec lister_parties() :: map()
+  def lister_parties() do
+    parties = for entree <- :pg.get_members("cartes") do
+      GenServer.call(entree, :lister_parties)
+    end
+    Enum.reduce(parties, &Map.merge/2)
+  end
+
   @impl true
   def init(_) do
     :pg.join("cartes", self())
