@@ -40,6 +40,16 @@ defmodule Jeu do
     GenServer.call(processus, :nombre_parties)
   end
 
+  @doc """
+  Cherche une partie à partir de son identifiant
+  Si la partie est trouvée, on retourne son PID, sinon `nil`
+  La recherche s'effectue sur chacune des instances exécutant l'application carte
+  """
+  @spec trouver_partie(integer()) :: pid() | nil
+  def trouver_partie(identifiant) do
+    Enum.find_value(:pg.get_members("cartes"), fn entree -> GenServer.call(entree, {:trouver_partie, identifiant}) end)
+  end
+
   @impl true
   def init(_) do
     :pg.join("cartes", self())
@@ -59,5 +69,10 @@ defmodule Jeu do
       DynamicSupervisor.start_child(Partie.Superviseur, {Partie, {identifiant, regles}})
     parties = Map.put(parties, identifiant, {nouvelle_partie, regles.titre()})
     {:reply, {identifiant, nouvelle_partie}, {identifiant_max + 1, parties}}
+  end
+
+  def handle_call({:trouver_partie, identifiant}, _from, {indentifiant_max, parties}) do
+    {partie, _} = Map.get(parties, identifiant, {nil, nil})
+    {:reply, partie, {indentifiant_max, parties}}
   end
 end
