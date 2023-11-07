@@ -28,7 +28,7 @@ defmodule Jeu do
   """
   @spec creer_partie(module()) :: {integer(), pid()}
   def creer_partie(regles) do
-    petite_charge = Enum.min_by(:pg.get_members("cartes"), fn processus -> nombre_parties(processus) end)
+    petite_charge = Enum.min_by(points_entree(), fn processus -> nombre_parties(processus) end)
     GenServer.call(petite_charge, {:creer_partie, regles})
   end
 
@@ -47,15 +47,25 @@ defmodule Jeu do
   """
   @spec trouver_partie(integer()) :: pid() | nil
   def trouver_partie(identifiant) do
-    Enum.find_value(:pg.get_members("cartes"), fn entree -> GenServer.call(entree, {:trouver_partie, identifiant}) end)
+    Enum.find_value(points_entree(), fn entree -> GenServer.call(entree, {:trouver_partie, identifiant}) end)
   end
+
+  @doc """
+  Retourne `true` si on trouve une instance de Jeu
+    `false` sinon.
+  """
+  @spec peut_communiquer?() :: true | false
+  def peut_communiquer?() do
+    length(points_entree()) != 0
+  end
+
 
   @doc """
   Retourne une map (identifiant => {PID, titre}) de toutes les parties, peu importe l'instance
   """
   @spec lister_parties() :: map()
   def lister_parties() do
-    parties = for entree <- :pg.get_members("cartes") do
+    parties = for entree <- points_entree() do
       GenServer.call(entree, :lister_parties)
     end
     Enum.reduce(parties, &Map.merge/2)
@@ -85,7 +95,7 @@ defmodule Jeu do
   """
   @spec ajouter_joueur(integer(), pid(), String.t()) :: {:ok, integer}
   def ajouter_joueur(id, processus, nom) do
-    entree = List.first(:pg.get_members("cartes"))
+    entree = List.first(points_entree())
     resultat = GenServer.call(entree, {:ajouter_joueur, id, processus, nom})
     IO.inspect(resultat, label: "JEUUUUUUUUU")
     case resultat do
@@ -112,7 +122,7 @@ defmodule Jeu do
   """
   @spec jouer(integer(), pid(), integer(), atom() | tuple()) :: :ok | :invalide
   def jouer(id, processus, joueur, coup) do
-    entree = List.first(:pg.get_members("cartes"))
+    entree = List.first(points_entree())
     resultat = GenServer.call(entree, {:jouer, id, processus, joueur, coup})
     resultat != :invalide && :ok || :invalide
   end
@@ -171,5 +181,20 @@ defmodule Jeu do
     end
 
     {:reply, resultat, {identifiant_max, parties}}
+  end
+
+  @impl true
+  def handle_call(:entree, _from, {identifiant_max, parties}) do
+    entree = points_entree()
+    if map_size(entree) == 0 do
+      {:reply, false, {identifiant_max, parties}}
+    else
+      {:reply, true, {identifiant_max, parties}}
+    end
+  end
+
+  @spec points_entree() :: [pid()]
+  def points_entree() do
+    :pg.get_members("cartes")
   end
 end
