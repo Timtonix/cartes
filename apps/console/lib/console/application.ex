@@ -4,7 +4,8 @@ defmodule Console.Application do
     topologies = Application.get_env(:libcluster, :topologies)
     children = [
       {Cluster.Supervisor, [topologies, [name: Carte.ClusterSupervisor]]},
-      %{id: :pg, start: {:pg, :start_link, []}}
+      %{id: :pg, start: {:pg, :start_link, []}},
+      Console.Interface
     ]
 
     opts = [strategy: :one_for_one, name: Console.Superviseur]
