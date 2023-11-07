@@ -91,9 +91,10 @@ defmodule Jeu do
     case resultat do
       {id_joueur, _} ->
         :pg.join({:joueur, id}, self())
-         notifier_joueur(self())
-         {:ok, id_joueur}
+        notifier_joueur(self())
+        {:ok, id_joueur}
       :invalide -> :invalide
+      _ -> :error
     end
 
   end
@@ -170,6 +171,6 @@ defmodule Jeu do
       notifier_joueurs(id)
     end
 
-    {:reply, resultat, [identifiant_max, parties]}
+    {:reply, resultat, {identifiant_max, parties}}
   end
 end

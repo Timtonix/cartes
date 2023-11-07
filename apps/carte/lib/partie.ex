@@ -73,6 +73,16 @@ defmodule Partie do
     GenServer.call(pid, {:coups, joueur})
   end
 
+  @spec condenser_pour(t(), integer()) ::map()
+  def condenser_pour(partie, joueur) do
+    partie.regles.condensee(partie.jeu, joueur)
+  end
+
+  @spec nom_processus(integer()) :: tuple()
+  defp nom_processus(id) do
+    {:via, Registry, {Partie.Registre, id}}
+  end
+
   @impl true
   @spec init(module()) :: {:ok, %Partie{}}
   def init({id, regles}) do
@@ -96,7 +106,7 @@ defmodule Partie do
     if partie.regles.ajouter_joueur?(partie.jeu) do
       {jeu, joueur} = partie.regles.ajouter_joueur(partie.jeu, nom)
       partie = %{partie | jeu: jeu}
-      {:reply, condenser_pour(partie, joueur), partie}
+      {:reply, {:ok, joueur}, partie}
     else
       {:reply, :invalide, partie}
     end
@@ -113,13 +123,5 @@ defmodule Partie do
     end
   end
 
-  @spec condenser_pour(t(), integer()) ::map()
-  def condenser_pour(partie, joueur) do
-    partie.regles.condensee(partie.jeu, joueur)
-  end
 
-  @spec nom_processus(integer()) :: tuple()
-  defp nom_processus(id) do
-    {:via, Registry, {Partie.Registre, id}}
-  end
 end
