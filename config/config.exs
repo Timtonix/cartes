@@ -16,3 +16,10 @@ import Config
 #       format: "$date $time [$level] $metadata$message\n",
 #       metadata: [:user_id]
 #
+
+config :libcluster,
+  topologies: [
+    carte: [
+      strategy: Cluster.Strategy.LocalEpmd
+    ]
+  ]
