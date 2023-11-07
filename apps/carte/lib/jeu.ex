@@ -110,6 +110,12 @@ defmodule Jeu do
   - `joueur` identifiant du joueur
   - `coup` le coup du joueur
   """
+  @spec jouer(integer(), pid(), integer(), atom() | tuple()) :: :ok | :invalide
+  def jouer(id, processus, joueur, coup) do
+    entree = List.first(:pg.get_members("cartes"))
+    resultat = GenServer.call(entree, {:jouer, id, processus, joueur, coup})
+    resultat != :invalide && :ok || :invalide
+  end
 
 
 
