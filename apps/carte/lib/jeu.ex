@@ -86,7 +86,7 @@ defmodule Jeu do
   @spec ajouter_joueur(integer(), pid(), String.t()) :: {:ok, integer}
   def ajouter_joueur(id, processus, nom) do
     entree = List.first(:pg.get_members("cartes"))
-    resultat = GenServer.call(entree, {:ajouter_jouer, id, processus, nom})
+    resultat = GenServer.call(entree, {:ajouter_joueur, id, processus, nom})
 
     case resultat do
       {id_joueur, _} ->
