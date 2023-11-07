@@ -131,7 +131,7 @@ defmodule JeuHuitTest do
     jeu = %Jeu.Huit{mains: mains, pioche: pioche, visible: visible}
     assert Jeu.Huit.jouer?(jeu, 0, :piocher) == true
     jeu = Jeu.Huit.jouer(jeu, 0, :piocher)
-    assert jeu.visible == %Carte{enseigne: "trèfle", valeur: "5"}
+    assert jeu.visible == %Carte{enseigne: "carreau", valeur: "7"}
     assert jeu.actuel == 1
   end
 end

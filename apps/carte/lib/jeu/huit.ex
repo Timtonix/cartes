@@ -111,7 +111,9 @@ defmodule Jeu.Huit do
   end
 
   def jouer?(jeu, joueur, :piocher) do
-
+    Enum.all?(jeu.mains[joueur], fn carte ->
+      not jouer?(jeu, joueur, {:jouer, carte})
+    end)
   end
 
   def jouer?(jeu, joueur, {:jouer, valeur, enseigne}) do
