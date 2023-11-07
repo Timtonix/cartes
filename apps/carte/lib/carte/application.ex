@@ -2,6 +2,7 @@ defmodule Carte.Application do
   use Application
 
   def start(_type, _args) do
+    IO.puts("Start CARTE")
     topologies = Application.get_env(:libcluster, :topologies)
     children = [
       {Cluster.Supervisor, [topologies, [name: Carte.ClusterSupervisor]]},
