@@ -62,12 +62,12 @@ defmodule Jeu do
   end
 
   @spec notifier_joueurs(integer()) :: :ok
-  def notifier_jouers(id) do
-    Enum.each(:pg.get_members({:joueur, id}), fn joueur -> notifier_jouer(joueur) end)
+  def notifier_joueurs(id) do
+    Enum.each(:pg.get_members({:joueur, id}), fn joueur -> notifier_joueur(joueur) end)
   end
 
   @spec notifier_joueur(pid()) :: :actualiser
-  def notifier_jouer(joueur) do
+  def notifier_joueur(joueur) do
     send(joueur, :actualiser)
   end
 
@@ -91,7 +91,7 @@ defmodule Jeu do
     case resultat do
       {id_joueur, _} ->
         :pg.join({:joueur, id}, self())
-         notifier_jouer(self())
+         notifier_joueur(self())
          {:ok, id_joueur}
       :invalide -> :invalide
     end
@@ -110,6 +110,7 @@ defmodule Jeu do
   - `joueur` identifiant du joueur
   - `coup` le coup du joueur
   """
+
 
 
 
@@ -150,7 +151,7 @@ defmodule Jeu do
     resultat = Partie.ajouter_joueur(processus, nom)
 
     if resultat != :invalide do
-      notifier_jouers(id)
+      notifier_joueurs(id)
     end
     {:reply, resultat, {identifiant_max, parties}}
   end
@@ -160,7 +161,7 @@ defmodule Jeu do
     resultat = Partie.jouer(processus, joueur, coup)
 
     if resultat != :invalide do
-      notifier_jouers(id)
+      notifier_joueurs(id)
     end
 
     {:reply, resultat, [identifiant_max, parties]}
