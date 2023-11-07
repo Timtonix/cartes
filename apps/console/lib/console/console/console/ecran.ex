@@ -34,8 +34,19 @@ defmodule Console.Ecran do
   est à préciser ici).
   """
   @callback prompt(struct()) :: String.t()
+
   @doc """
   Gère les entrées claviers de l’utilisateur.
+  Cette fonction peut retourner plusieurs informations :
+  - `:silence` : indique à l’interface qu’il n’est pas nécessaire d’afficher l’écran
+  de novueau ;
+  - `:prompt` : indique à l’interface qu’il est simplement nécessaire d’afficher de
+  nouveau le prompt de l’écran, sans son texte ;
+  - `:rafraîchir` : indique à l’interface qu’il faut afficher tout l’écran (titre,
+  texte et prompt) ;
+  - `{atome, texte}` : où `atome` est l’un des trois atomes ci-dessus et `texte` est
+  le texte à afficher ;
+  - `écran` : où `écran` est l
   """
-  @callback gerer_entree() :: :ok
+  @callback gerer_entree(struct(), String.t()) :: retour_clavier()
 end
