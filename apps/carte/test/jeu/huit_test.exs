@@ -89,7 +89,7 @@ defmodule JeuHuitTest do
     mains = %{
       0 => Pile.new() |> Pile.ajouter("as", "trèfle"),
       1 => Pile.new() |> Pile.ajouter("roi", "trèfle"),
-      2 => Pile.new() |> Pile.ajouter("9", "carreau")
+      2 => Pile.new() |> Pile.ajouter("1", "carreau")
     }
     visible = Carte.new("7", "carreau")
     jeu = %Jeu.Huit{mains: mains, pioche: pioche, visible: visible}
@@ -100,7 +100,8 @@ defmodule JeuHuitTest do
     assert Pile.taille(jeu.mains[2]) == 1
     assert jeu.sens == :inverse
     assert jeu.visible == %Carte{enseigne: "trèfle", valeur: "1"}
-    jeu = Jeu.Huit.jouer(jeu, jeu.actuel, {:jouer, "as", "carreau"})
+    assert Jeu.Huit.jouer?(jeu, jeu.actuel, {:jouer, "1", "carreau"}) == true
+    jeu = Jeu.Huit.jouer(jeu, jeu.actuel, {:jouer, "1", "carreau"})
     assert jeu.actuel == 0
     assert jeu.sens == :ordinaire
   end
