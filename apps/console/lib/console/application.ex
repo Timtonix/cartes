@@ -5,7 +5,8 @@ defmodule Console.Application do
     children = [
       {Cluster.Supervisor, [topologies, [name: Carte.ClusterSupervisor]]},
       %{id: :pg, start: {:pg, :start_link, []}},
-      Console.Interface
+      Console.Interface,
+      Console.Clavier
     ]
 
     opts = [strategy: :one_for_one, name: Console.Superviseur]
