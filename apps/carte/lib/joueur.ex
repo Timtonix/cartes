@@ -18,7 +18,7 @@ defmodule Joueur do
   @impl true
   def handle_info(:actualiser, {id, process, joueur, nom})do
     condensee = Partie.condensee(process, joueur)
-    IO.inspect(joueur)
+    IO.inspect(joueur, label: "JOUEUR")
     IO.inspect(condensee, label: "Le joueur #{nom} (#{joueur} dans la partie #{id} a été notifié)")
     {:noreply, {id, process, joueur, nom}}
   end

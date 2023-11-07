@@ -78,6 +78,7 @@ defmodule Jeu.Huit do
     mains = Map.put(jeu.mains, numero_joueur, cartes_joueur)
     noms = Map.put(jeu.noms, numero_joueur, joueur)
     jeu = %{jeu | mains: mains, noms: noms, pioche: pioche}
+    IO.inspect(numero_joueur, label: "JEU.HUIT")
     {jeu, numero_joueur}
   end
 

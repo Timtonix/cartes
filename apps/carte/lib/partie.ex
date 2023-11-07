@@ -106,6 +106,7 @@ defmodule Partie do
     if partie.regles.ajouter_joueur?(partie.jeu) do
       {jeu, joueur} = partie.regles.ajouter_joueur(partie.jeu, nom)
       partie = %{partie | jeu: jeu}
+      IO.inspect(joueur, label: "PARTIE")
       {:reply, {:ok, joueur}, partie}
     else
       {:reply, :invalide, partie}

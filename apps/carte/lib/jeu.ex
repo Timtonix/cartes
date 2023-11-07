@@ -87,14 +87,13 @@ defmodule Jeu do
   def ajouter_joueur(id, processus, nom) do
     entree = List.first(:pg.get_members("cartes"))
     resultat = GenServer.call(entree, {:ajouter_joueur, id, processus, nom})
-
+    IO.inspect(resultat, label: "JEUUUUUUUUU")
     case resultat do
-      {id_joueur, _} ->
+      {:ok, id_joueur} ->
         :pg.join({:joueur, id}, self())
         notifier_joueur(self())
         {:ok, id_joueur}
       :invalide -> :invalide
-      _ -> :error
     end
 
   end
