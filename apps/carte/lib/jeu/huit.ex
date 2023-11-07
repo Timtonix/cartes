@@ -110,6 +110,10 @@ defmodule Jeu.Huit do
     false
   end
 
+  def jouer?(jeu, joueur, :piocher) do
+
+  end
+
   def jouer?(jeu, joueur, {:jouer, valeur, enseigne}) do
     # En utilisant plutot la récursion
     carte = Carte.new(valeur, enseigne)

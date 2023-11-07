@@ -114,7 +114,23 @@ defmodule JeuHuitTest do
     }
     visible = Carte.new("7", "carreau")
     jeu = %Jeu.Huit{mains: mains, pioche: pioche, visible: visible}
+    assert Jeu.Huit.jouer?(jeu, 0, {:jouer, "5", "trèfle"}) == false
     jeu = Jeu.Huit.jouer(jeu, 0, {:jouer, "5", "trèfle"})
+    assert jeu.visible == %Carte{enseigne: "trèfle", valeur: "5"}
+    assert jeu.actuel == 1
+  end
+
+  test "Un joueur peu piocher" do
+    pioche = Pile.new() |> Pile.ajouter("3", "pique") |> Pile.ajouter("7", "coeur")
+    mains = %{
+      0 => Pile.new() |> Pile.ajouter("5", "trèfle"),
+      1 => Pile.new() |> Pile.ajouter("roi", "trèfle"),
+      2 => Pile.new() |> Pile.ajouter("9", "carreau")
+    }
+    visible = Carte.new("7", "carreau")
+    jeu = %Jeu.Huit{mains: mains, pioche: pioche, visible: visible}
+    assert Jeu.Huit.jouer?(jeu, 0, :piocher) == true
+    jeu = Jeu.Huit.jouer(jeu, 0, :piocher)
     assert jeu.visible == %Carte{enseigne: "trèfle", valeur: "5"}
     assert jeu.actuel == 1
   end
