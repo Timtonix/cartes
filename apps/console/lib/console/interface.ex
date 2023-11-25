@@ -53,6 +53,8 @@ defmodule Console.Interface do
 
     complet = """
     #{(seulement_prompt && "") || titre}
+
+    #{(seulement_prompt && "") || String.trim(texte)}
     #{message}
     #{prompt}
     """
