@@ -66,7 +66,7 @@ defmodule Console.Ecran.NomJoueur do
     if String.length(entree) < 3 do
       {:prompt, "Le nom du joueur doit contenir au moins 3 caractères."}
     else
-      :completer_ici_et_retourner_un_ecran
+      Console.Ecran.Parties.new(entree)
     end
   end
 end

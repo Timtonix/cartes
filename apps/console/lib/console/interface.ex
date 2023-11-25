@@ -11,8 +11,9 @@ defmodule Console.Interface do
   Lance l'interface
   """
   def start_link(options \\ []) do
+    IO.puts("On démarre l'interface\n------------Bienvenue------------------")
     options = Keyword.put(options, :name, :interface)
-    GenServer.start_link(__MODULE__, options)
+    GenServer.start_link(__MODULE__, nil, options)
   end
 
   @doc """
@@ -21,6 +22,7 @@ defmodule Console.Interface do
   """
   @spec gerer_entree(String.t()) :: :ok
   def gerer_entree(entree) do
+    IO.puts("On m'appelle l'interface !")
     GenServer.call(:interface, {:entree, entree})
   end
 
@@ -39,6 +41,7 @@ defmodule Console.Interface do
 
   @impl true
   def handle_call({:entree, entree}, _from, ecran) do
+    IO.puts("ICH BIN DA")
     module = ecran.__struct__
     retour = module.gerer_entree(ecran, entree)
     ecran = afficher_retour(ecran, retour)
