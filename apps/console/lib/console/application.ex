@@ -9,7 +9,7 @@ defmodule Console.Application do
       Console.Clavier
     ]
 
-    opts = [strategy: :one_for_one, name: Console.Superviseur]
+    opts = [strategy: :one_for_one, name: Console.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
