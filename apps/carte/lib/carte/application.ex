@@ -12,7 +12,7 @@ defmodule Carte.Application do
       Jeu
     ]
 
-    opts = [strategy: :one_for_one, name: Carte.Superviseur]
+    opts = [strategy: :one_for_one, name: Carte.Supervisor]
     Supervisor.start_link(children, opts)
   end
   

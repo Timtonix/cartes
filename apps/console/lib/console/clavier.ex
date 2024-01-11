@@ -15,7 +15,8 @@ defmodule Console.Clavier do
   end
 
   def ecouter_clavier(_ \\ nil) do
-    entree_clavier = IO.gets(">") |> String.trim()
+    entree_clavier = IO.gets(">")
+                     |> String.trim()
     Console.Interface.gerer_entree(entree_clavier)
     ecouter_clavier(nil)
   end
